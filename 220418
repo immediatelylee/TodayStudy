@@ -1,0 +1,35 @@
+<li class="nav-item" th:classappend="${menu} == 'board'?'active'" >
+이거 오류나서 시간 많이 잡아먹음. 
+결국은 못해결함. 이거는 버그인듯함. 
+
+    <div class="text-end">
+    
+            <a type="button" class="btn btn-primary" th:href="@{/board/form}">쓰기</a>
+    </div>
+
+    버튼 이동시킬려고 div씌어서 text-right했는데 움직이지 않아서 확인해보니 bootstrap에서는 text-left , right를 없에고 text-start , text-end로 바꿈
+
+    <form>
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="email" class="form-control" id="title" placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+        <textarea class="form-control" id="content" rows="3"></textarea>
+    </div>
+    </form>
+
+    label 과 밑의 id를 일치시키는거 (title context)
+    안하면 오류남 구동이 않되지 는 않는데 권장사항은 아닌듯 
+    일치하면 클릭 범위가 늘어남 체크 
+    라벨 + 체크박스 조합인데  id가 일치 하지 않으면 체크박스 하나하나 클릭해야함
+    하지만 id 일치 시키면 라벨에 있는 글을 눌러도 체크박스가 클릭됨. 클릭 범위 늘어남
+
+오늘 마리아 디비 설치해서 설정하기 하였음.   id autoincrement ,  마리아 db에서는 long값이 bigint로 되어있음. (같다는 것이 아니고 int보다 큰범위 )
+설정하고 나서 jpa 의존성 추가해서 연결도 하였음. 
+
+board를 만들고 boardcontroller랑 repository도 생성함. 
+
+어느 사이트 가이드를 참조하고 이런거는 까먹었음. 다시 정리하기 
+
