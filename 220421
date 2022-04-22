@@ -1,0 +1,82 @@
+jps incremental annotation processing is disabled 
+에러
+10:45
+
+; 가 있음에도 ';' expected 에러 11:39
+-> } 가 하나 삭제되었음. 
+
+
+
+자동인덴트 ctrl alt i
+
+    @GetMapping("/boards")
+    List<Board> all(@RequestParam(required = false) String title) {
+        if (StringUtils.isEmpty(title)) {
+            return repository.findAll();
+        } else {
+            return repository.findByTitle(title);
+        }
+    }
+
+    title로 검색
+
+title & contetn 검색 
+    @GetMapping("/boards")
+    List<Board> all(@RequestParam(required = false) String title,
+    @RequestParam(required = false,defaultValue ="") String content) {
+        if (StringUtils.isEmpty(title) && StringUtils.isEmpty(content)) {
+            return repository.findAll();
+        } else {
+            return repository.findByTitleOrContent(title,content);
+        }
+    }
+
+    public interface BoardRepository extends JpaRepository<Board,Long> {
+    List<Board> findByTitle(String title);
+    List<Board> findByTitleOrContent(String title,String content);
+
+    지금은 리스트를 리턴했지만 
+
+    page를 리턴할수도 있음. 
+
+
+    일단 sample를 변형해서 만든 api들은  모두 정상 작동함 put을통한 업데이트 ,delete도 됨. 
+
+
+
+    현재는 보드에 총 글수가 출력되는데 글이 많아지게 되면 곤란하므로 page처리를 해봄
+
+    우선 ui상으로 page index를 찾음.
+    https://getbootstrap.com/docs/5.1/components/pagination/#overview
+
+    bootstrap 에서 paging overview 를 찾았고  여기서 샘플을 쓸수 있음. 
+
+
+    기능을 만들기 위해서 샘플을 찾아봄 
+    https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
+    에서 pageable을 검색하면 
+
+public interface PagingAndSortingRepository<T, ID> extends CrudRepository<T, ID> {
+
+  Iterable<T> findAll(Sort sort);
+
+  Page<T> findAll(Pageable pageable);
+}
+이런 예제가 나옴 
+기존의 repository에 Page 제네릭을 선언하고 변수를 pageable 로 받으면 된다는 컨셉임
+
+밑에 보면 사용법이 나와 있는데  
+
+PagingAndSortingRepository<User, Long> repository = // … get access to a bean
+Page<User> users = repository.findAll(PageRequest.of(1, 20));
+
+이 구문을 BoardController에 적용함
+    @GetMapping("/list")
+    public String list(Model model){
+        Page<Board> boards = boardRepository.findAll(PageRequest.of(0, 20));
+        model.addAttribute("boards",boards);
+
+
+기본list를 page로 바꾸고 findall에 pagerequest를 추가함. 
+
+
